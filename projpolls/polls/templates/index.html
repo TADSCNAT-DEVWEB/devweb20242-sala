@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset='utf-8'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <title>Enquetes</title>
+    <meta name='viewport' content='width=device-width, initial-scale=1'>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@1.0.2/css/bulma.min.css">
+</head>
+<body>
+    <h1 class="title">Enquetes</h1>
+        <ul>
+        {% if lista_questoes%}
+            {% for questao in lista_questoes %}
+                <li>
+                        <a class="button is-primary" href="/polls/{{questao.id}}/">Questão: {{ questao.question_text }}</a>
+                </li>
+            {% endfor %}
+        {% else %}
+                <p class="notification is-danger">Nenhuma Questão Disponível</p>
+        {% endif %}
+    </ul>       
+    </body>
+</body>
+</html>
