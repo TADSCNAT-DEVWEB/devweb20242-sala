@@ -10,8 +10,8 @@
 <body>
     <h1 class="title">Enquetes</h1>
         <ul>
-        {% if lista_questoes%}
-            {% for questao in lista_questoes %}
+        {% if lista %}
+            {% for questao in lista %}
                 <li>
                         <a class="button is-primary" href="/polls/{{questao.id}}/">Questão: {{ questao.question_text }}</a>
                 </li>

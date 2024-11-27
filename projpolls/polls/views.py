@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render,get_object_or_404
 from django.http import HttpResponse
 from .models import Question
 
@@ -6,12 +6,13 @@ from .models import Question
 
 def index(request):
     #- indica que ele vai colocar em ordem decrescente
-    lista_questoes=Question.objects.order_by('-pub_date')[:5]
-    context={'lista_questoes':lista_questoes}
+    lista_questoes=Question.objects.all()
+    context={'lista':lista_questoes}
     return render(request,'index.html',context)
 def details(request,question_id):
-    response=f'Você está visualizando a questão {question_id}'
-    return HttpResponse(response)
+    questao=get_object_or_404(Question,pk=question_id)
+    context={'questao':questao}
+    return render(request,'details.html',context)
 def results(request,question_id):
     response=f'Resultados da questão {question_id}'
     return HttpResponse(response)

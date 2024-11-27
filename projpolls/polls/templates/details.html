@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset='utf-8'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <title>Enquetes</title>
+    <meta name='viewport' content='width=device-width, initial-scale=1'>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@1.0.2/css/bulma.min.css">
+</head>
+<body>
+    <h1 class="title">{{questao.question_text}}</h1>
+        <table border="1">
+            <tr>
+                <th>Alternativa</th>
+                <th>Votos</th>
+            </tr>
+            {% if questao.choice_set.count > 0%}
+                {% for choice in questao.choice_set.all %}
+                    <tr>
+                            <td>{{ choice.choice_text }}</td>
+                            <td>{{ choice.votes }}</td>
+                    </tr>
+                {% endfor %}
+            {% else %}
+                    <p class="notification is-danger">Questão sem alternativas cadastradas</p>
+            {%endif%}
+        </table>          
+    </body>
+</body>
+</html>
