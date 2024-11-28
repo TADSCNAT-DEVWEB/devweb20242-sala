@@ -1,6 +1,7 @@
 from django.shortcuts import render,get_object_or_404
-from django.http import HttpResponse
-from .models import Question
+from django.http import HttpResponse,HttpResponseRedirect
+from django.urls import reverse
+from .models import Question,Choice
 
 # Create your views here.
 
@@ -14,8 +15,17 @@ def details(request,question_id):
     context={'questao':questao}
     return render(request,'details.html',context)
 def results(request,question_id):
-    response=f'Resultados da questão {question_id}'
-    return HttpResponse(response)
+    questao=get_object_or_404(Question,pk=question_id)
+    context={'questao':questao}
+    return render(request,'results.html',context)
 def vote(request,question_id):
-    response=f'Votação para a questão {question_id}'
-    return HttpResponse(response)
+    questao=get_object_or_404(Question,pk=question_id)
+    try:
+        alternativa=questao.choice_set.get(pk=request.POST['alternativa'])
+    except(KeyError,Choice.DoesNotExist):
+        context={'questao':questao,'mensagem_erro':'Você não selecionou uma alternativa'}
+        return render(request,'details.html',context)
+    else:
+        alternativa.votes+=1
+        alternativa.save()
+        return HttpResponseRedirect(reverse('polls:results',args=(question_id,)))

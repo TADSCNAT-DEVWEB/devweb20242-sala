@@ -9,22 +9,25 @@
 </head>
 <body>
     <h1 class="title">{{questao.question_text}}</h1>
-        <table border="1">
-            <tr>
-                <th>Alternativa</th>
-                <th>Votos</th>
-            </tr>
-            {% if questao.choice_set.count > 0%}
+        {% if mensagem_erro %}
+        <p class="notification is-danger">{{mensagem_erro}}</p>
+        {% endif %}
+            {% if questao.choice_set.count > 0 %}
+                <form action="{% url 'polls:vote' questao.id %}" method="post">
+                    {% csrf_token %}
                 {% for choice in questao.choice_set.all %}
-                    <tr>
-                            <td>{{ choice.choice_text }}</td>
-                            <td>{{ choice.votes }}</td>
-                    </tr>
+                    <div>
+                        <label class="radio">
+                        <input type="radio" name="alternativa" id="choice{{forloop.counter}}" value="{{choice.id}}"/>
+                        {{choice.choice_text}}
+                        </label>
+                    </div>
                 {% endfor %}
+                <p><button class="button is-link">Votar</button></p>
+                </form>
             {% else %}
-                    <p class="notification is-danger">Questão sem alternativas cadastradas</p>
-            {%endif%}
-        </table>          
+                    <div class="notification is-danger">Questão sem alternativas cadastradas</div>
+            {% endif %}      
     </body>
 </body>
 </html>

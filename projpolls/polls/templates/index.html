@@ -13,7 +13,7 @@
         {% if lista %}
             {% for questao in lista %}
                 <li>
-                        <a class="button is-primary" href="/polls/{{questao.id}}/">Questão: {{ questao.question_text }}</a>
+                        <a class="button is-primary" href="{% url 'polls:details' questao.id %}">Questão: {{ questao.question_text }}</a>
                 </li>
             {% endfor %}
         {% else %}
