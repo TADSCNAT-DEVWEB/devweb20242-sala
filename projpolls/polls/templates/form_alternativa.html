@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset='utf-8'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <title>Enquetes</title>
+    <meta name='viewport' content='width=device-width, initial-scale=1'>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@1.0.2/css/bulma.min.css">
+</head>
+<body>
+    <h1 class="title">{{questao.question_text}}</h1>
+        {% if mensagem_erro %}
+        <p class="notification is-danger">{{mensagem_erro}}</p>
+        {% endif %}
+                <form action="{% url 'polls:cadastrar_alternativa' questao.id %}" method="post">
+                    {% csrf_token %}
+                    <div class="field">
+                        <label class="label">Alternativa:</label>
+                        <div class="control">
+                          <input class="input" type="text" placeholder="alternativa" name="alternativa">
+                        </div>
+                      </div>
+                      
+                <p><button class="button is-link">Cadastrar</button></p>
+                </form>     
+    </body>
+</body>
+</html>
