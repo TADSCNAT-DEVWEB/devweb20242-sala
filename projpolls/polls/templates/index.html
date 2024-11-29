@@ -14,7 +14,9 @@
             {% for questao in lista %}
                 <li>
                         <a class="button is-primary" href="{% url 'polls:details' questao.id %}">Questão: {{ questao.question_text }}</a>
-                </li>
+                        <a class="button is-info" href="{% url 'polls:results' questao.id %}">Resultado</a>
+                        <a class="button is-light" href="{% url 'polls:alternativas' questao.id %}">Cadastrar Alternativa</a>
+                    </li>
             {% endfor %}
         {% else %}
                 <p class="notification is-danger">Nenhuma Questão Disponível</p>
