@@ -1,0 +1,6 @@
+.table {
+    --bulma-table-row-hover-background-color: var(--bulma-primary-bold)
+}
+ul {
+    margin-left: 10%;
+}
