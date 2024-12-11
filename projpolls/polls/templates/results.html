@@ -6,12 +6,15 @@
     <title>Enquetes</title>
     <meta name='viewport' content='width=device-width, initial-scale=1'>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@1.0.2/css/bulma.min.css">
+    {%load static%}
+
+    <link rel="stylesheet" href="{% static 'polls/css/style.css'%}">
 </head>
 <body>
     <h1 class="title">{{questao.question_text}}</h1>
 
             {% if questao.choice_set.count > 0%}
-            <table class="table is-bordered is-striped is-hoverable is-narrow">
+            <table class="table is-bordered is-hoverable is-narrow">
                 <thead>
                     <tr>
                       <th>Alternativa</th>
