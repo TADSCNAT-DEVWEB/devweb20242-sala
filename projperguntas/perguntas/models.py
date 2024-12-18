@@ -22,7 +22,7 @@ class Pergunta(models.Model):
     data=models.DateField(verbose_name="Data de Cadastro",auto_now_add=True)
     curtidas=models.IntegerField(verbose_name="Número de Curtidas",default=0)
     cadastrador=models.ForeignKey(Usuario,verbose_name="Cadastrado Por",on_delete=models.SET_NULL,related_name="perguntas",null=True)
-
+    
     def __str__(self):
         return self.enunciado
 
