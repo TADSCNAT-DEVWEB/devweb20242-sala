@@ -1,5 +1,5 @@
 from django.db import models
-
+import uuid
 # Create your models here.
 
 class Genre(models.Model):
@@ -45,3 +45,22 @@ class Authorship(models.Model):
 
     def __str__(self):
         return f'{self.book.title}-{self.role}'
+
+class BookInstance(models.Model):
+    LOAN_STATUS={
+        "M":"Maintenence",
+        "O":"On Loan",
+        "A":"Available",
+        "R":"Reserved",
+    }
+    uniqueID=models.UUIDField(verbose_name="ID Único",default=uuid.uuid4)
+    book=models.ForeignKey(Book,on_delete=models.RESTRICT,related_name="bookInstances")
+    dueBack=models.DateField(verbose_name="Data da devolução",null=True,blank=True)
+    imprint=models.CharField(verbose_name="Edição",max_length=100)
+    status=models.CharField(max_length=1,choices=LOAN_STATUS,blank=True,default='M',help_text="Book Availability")
+
+    def __str__(self):
+        return f'{self.id} - {self.book.title}'
+    
+    class Meta:
+        ordering=['dueBack']
