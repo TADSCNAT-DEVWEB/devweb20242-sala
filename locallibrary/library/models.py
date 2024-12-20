@@ -32,7 +32,9 @@ class Book(models.Model):
     language=models.ForeignKey(Language,on_delete=models.SET_NULL,null=True,related_name="books")
     isbn=models.CharField(verbose_name='ISBN',max_length=13,unique=True,help_text='Informe o <a href="https://www.isbn-international.org/content/what-isbn'
                                       '">ISBN</a>')
-    authors=models.ManyToManyField(Author,related_name="books",help_text="Selecione os Autores do Livro",through='Authorship')
+    authors=models.ManyToManyField(Author,related_name="books",
+                                   help_text="Selecione os Autores do Livro",
+                                   through='Authorship')
     genres=models.ManyToManyField(Genre,related_name="books",help_text="Selecione os Gêneros do Livro")
 
     def __str__(self):
@@ -55,12 +57,26 @@ class BookInstance(models.Model):
     }
     uniqueID=models.UUIDField(verbose_name="ID Único",default=uuid.uuid4)
     book=models.ForeignKey(Book,on_delete=models.RESTRICT,related_name="bookInstances")
-    dueBack=models.DateField(verbose_name="Data da devolução",null=True,blank=True)
+    dueBack=models.DateField(verbose_name="Data prevista de devolução",null=True,blank=True)
     imprint=models.CharField(verbose_name="Edição",max_length=100)
     status=models.CharField(max_length=1,choices=LOAN_STATUS,blank=True,default='M',help_text="Book Availability")
-
+    readers=models.ManyToManyField('Reader',verbose_name="Leitores",related_name="bookInstances",through="Loan")
     def __str__(self):
         return f'{self.id} - {self.book.title}'
     
     class Meta:
         ordering=['dueBack']
+
+class Reader(models.Model):
+    name=models.CharField(verbose_name="Nome",max_length=255)
+    email=models.EmailField(verbose_name="Email")
+
+    def __str__(self):
+        return self.name
+
+class Loan(models.Model):
+    reader=models.ForeignKey(Reader,verbose_name="Leitor",on_delete=models.RESTRICT,related_name="loans")
+    bookInstance=models.ForeignKey(BookInstance,verbose_name="Exemplar",on_delete=models.RESTRICT,related_name="loans")
+    dueDate=models.DateField(verbose_name="Data Prevista para Devolução")
+    loanDate=models.DateField(verbose_name="Data do Empréstimo",auto_now_add=True)
+    returnDate=models.DateField(verbose_name="Data Devolução",null=True,blank=True)
