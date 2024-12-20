@@ -80,3 +80,6 @@ class Loan(models.Model):
     dueDate=models.DateField(verbose_name="Data Prevista para Devolução")
     loanDate=models.DateField(verbose_name="Data do Empréstimo",auto_now_add=True)
     returnDate=models.DateField(verbose_name="Data Devolução",null=True,blank=True)
+    
+    def __str__(self):
+        return f'{self.bookInstance.book.title}-{self.reader.name}-{self.loanDate}'
