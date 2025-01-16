@@ -12,6 +12,10 @@ class Evento(models.Model):
     data = models.DateField(verbose_name="Data")
     local = models.CharField(max_length=200,verbose_name="Local")
     
+class Participante(models.Model):
+    nome = models.CharField(max_length=150,verbose_name="Nome")
+    telefone =  models.CharField(max_length=20,verbose_name="Telefone")
+    email = models.EmailField(max_length=100,verbose_name="Email")
 
 class Atividade(models.Model):
     data = models.DateField(verbose_name="Data da Atividade")
@@ -21,12 +25,19 @@ class Atividade(models.Model):
     capacidade = models.IntegerField(verbose_name="Capacidade")
     ministrante = models.ForeignKey(Ministrante, on_delete=models.SET_NULL,verbose_name="Ministrante",related_name="atividades")
     evento = models.ForeignKey(Evento, on_delete=models.CASCADE, related_name="atividades",verbose_name="Evento")
-
-class Participante(models.Model):
-    nome = models.CharField(max_length=150,verbose_name="Nome")
-    telefone =  models.CharField(max_length=20,verbose_name="Telefone")
-    email = models.EmailField(max_length=100,verbose_name="Email")
+    participantes=models.ManyToManyField(Participante,through='Inscricao',related_name="atividades")
 
 class Inscricao(models.Model):
-    data = models.DateField
+    data = models.DateField(verbose_name="Data da Inscrição",auto_now_add=True)
+    participante=models.ForeignKey(Participante,on_delete=models.CASCADE,verbose_name="Participante",related_name="inscricoes")
+    atividade=models.ForeignKey(Atividade,on_delete=models.CASCADE,verbose_name="Atividade",related_name="inscricoes")
+    presenca=models.BooleanField(verbose_name="Presença",default=False)
 
+class Certificado(models.Model):
+    data_emissao=models.DateField(verbose_name="Data do Certificado",auto_now_add=True)
+    inscricao=models.OneToOneField(Inscricao,verbose_name="Inscrição")
+
+class Avaliacao(models.Model):
+    nota=models.IntegerField(verbose_name="Nota")
+    comentario=models.TextField(verbose_name="Comentário")
+    inscricao=models.OneToOneField(Inscricao,verbose_name="Inscrição")
