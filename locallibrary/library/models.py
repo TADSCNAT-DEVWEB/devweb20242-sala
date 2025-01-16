@@ -83,3 +83,7 @@ class Loan(models.Model):
     
     def __str__(self):
         return f'{self.bookInstance.book.title}-{self.reader.name}-{self.loanDate}'
+
+loan=Loan()
+
+loan.bookInstance.book.title
