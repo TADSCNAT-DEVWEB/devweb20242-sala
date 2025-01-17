@@ -1,5 +1,7 @@
 from django.db import models
 
+from django.core.exceptions import ValidationError
+
 # Create your models here.
 
 class Ministrante(models.Model):
@@ -56,7 +58,7 @@ class Certificado(models.Model):
     inscricao=models.OneToOneField(Inscricao,verbose_name="Inscrição",
                                    on_delete=models.CASCADE)
     def __str__(self):
-        return self.inscricao
+        return f'{self.inscricao}'
 
 class Avaliacao(models.Model):
     nota=models.IntegerField(verbose_name="Nota")
