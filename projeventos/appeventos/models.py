@@ -32,7 +32,7 @@ class Atividade(models.Model):
     local = models.CharField(max_length=255,verbose_name="Local")
     titulo = models.CharField(max_length=255,verbose_name="Título")
     capacidade = models.IntegerField(verbose_name="Capacidade")
-    ministrante = models.ForeignKey(Ministrante, on_delete=models.SET_NULL,verbose_name="Ministrante",related_name="atividades")
+    ministrante = models.ForeignKey(Ministrante, on_delete=models.SET_NULL,verbose_name="Ministrante",related_name="atividades",null=True,blank=True)
     evento = models.ForeignKey(Evento, on_delete=models.CASCADE, related_name="atividades",verbose_name="Evento")
     participantes=models.ManyToManyField(Participante,through='Inscricao',related_name="atividades")
 
@@ -65,3 +65,6 @@ class Avaliacao(models.Model):
                                    on_delete=models.CASCADE)
     def __str__(self):
         return f'{self.inscricao}-{self.nota}'
+    
+    class Meta:
+        verbose_name_plural="Avaliações"
