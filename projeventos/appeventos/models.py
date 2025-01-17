@@ -38,6 +38,9 @@ class Atividade(models.Model):
     evento = models.ForeignKey(Evento, on_delete=models.CASCADE, related_name="atividades",verbose_name="Evento")
     participantes=models.ManyToManyField(Participante,through='Inscricao',related_name="atividades")
 
+    def tem_vaga(self):
+        return self.participantes.count<self.capacidade
+
     def __str__(self):
         return f'{self.evento}-{self.titulo}'
 
@@ -50,6 +53,11 @@ class Inscricao(models.Model):
     def __str__(self):
         return f'{self.atividade.evento}-{self.atividade.titulo}-{self.participante}'
 
+    def save(self,*args,**kwargs):
+        if not self.atividade.tem_vaga():
+            raise ValidationError("Não é possível realizar a inscrição por falta de vagas!")
+        return super().save(*args,**kwargs)
+
     class Meta:
         verbose_name_plural="Inscrições"
 
@@ -59,6 +67,11 @@ class Certificado(models.Model):
                                    on_delete=models.CASCADE)
     def __str__(self):
         return f'{self.inscricao}'
+    
+    def save(self,*args,**kwargs):
+        if not self.inscricao.presenca:
+            raise ValidationError("Não é possível gerar certificado para participante ausente!")
+        return super().save(*args,**kwargs)
 
 class Avaliacao(models.Model):
     nota=models.IntegerField(verbose_name="Nota")
