@@ -29,11 +29,17 @@ class Participante(models.Model):
         return self.nome
 
 class Atividade(models.Model):
+    TIPOS=(
+        ('MI','Minicurso'),
+        ('PR','Palestra'),
+        ('OF','Oficina'),
+    )
     data = models.DateField(verbose_name="Data da Atividade")
     hora = models.TimeField(verbose_name="Hora da Atividade")
     local = models.CharField(max_length=255,verbose_name="Local")
     titulo = models.CharField(max_length=255,verbose_name="Título")
     capacidade = models.IntegerField(verbose_name="Capacidade")
+    tipo=models.CharField(max_length=2,verbose_name="Tipo de Atividade",choices=TIPOS,default='MI')
     ministrante = models.ForeignKey(Ministrante, on_delete=models.SET_NULL,verbose_name="Ministrante",related_name="atividades",null=True,blank=True)
     evento = models.ForeignKey(Evento, on_delete=models.CASCADE, related_name="atividades",verbose_name="Evento")
     participantes=models.ManyToManyField(Participante,through='Inscricao',related_name="atividades")
