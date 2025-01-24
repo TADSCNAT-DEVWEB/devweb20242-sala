@@ -45,7 +45,7 @@ class Atividade(models.Model):
     participantes=models.ManyToManyField(Participante,through='Inscricao',related_name="atividades")
 
     def tem_vaga(self):
-        return self.participantes.count<self.capacidade
+        return self.participantes.count()<self.capacidade
 
     def __str__(self):
         return f'{self.evento}-{self.titulo}'
@@ -87,5 +87,9 @@ class Avaliacao(models.Model):
     def __str__(self):
         return f'{self.inscricao}-{self.nota}'
     
+    def save(self,*args,**kwargs):
+        if not self.inscricao.presenca:
+            raise ValidationError("Não é possível registrar avaliação para participante ausente!")
+        return super().save(*args,**kwargs)   
     class Meta:
         verbose_name_plural="Avaliações"
