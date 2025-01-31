@@ -1,0 +1,27 @@
+{% extends "appeventos/base.html" %}
+
+{% block title %}Sistema de Eventos - Eventos{% endblock %}
+
+{% block conteudo %}
+{% block mensagens %}{% endblock %}
+<div class="content">
+    <h1>Listagem de Eventos</h1>
+    <div class="columns is-multiline">
+        {% for evento in eventos %}
+        <div class="column is-one-third">
+            <div class="box">
+                <h2 class="subtitle">{{ evento.nome | upper }}</h2>
+                <p>Data: {{ evento.data | date:"d/m/Y" }}</p>
+                <p>Local: {{ evento.local }}</p>
+                <a href="{% url 'appeventos:listar_atividades' evento.id %}" class="button is-link">Detalhes</a>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}
+{% block footer %}
+<p>
+    <strong>TADS-CNAT</strong> Listagem de Eventos
+  </p>
+{% endblock %}

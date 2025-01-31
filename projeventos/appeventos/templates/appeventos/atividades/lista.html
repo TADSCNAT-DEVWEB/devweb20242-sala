@@ -1,0 +1,68 @@
+{% extends "appeventos/base.html" %}
+
+{% block title %}Sistema de Eventos - Atividades{% endblock %}
+
+{% block conteudo %}
+<div class="content">
+    
+    <h1>Listagem de Atividades do Evento {{nome_evento}}</h1>
+    
+    <form method="get" action="{% url 'appeventos:listar_atividades' evento_id %}">
+        <div class="field has-addons">
+            <div class="control">
+              <input class="input" type="text" name="criterio" placeholder="Buscar pelo título">
+            </div>
+            <div class="control">
+              <button class="button is-info">
+                Buscar
+              </button>
+            </div>
+          </div>
+    </form>
+<p></p>
+    {% if not messages %}
+    
+    
+    
+    <table class="table is-bordered is-striped is-hoverable is-narrow">
+        <thead>
+            <tr>
+              <th>Atividade</th>
+              <th>Tipo</th>
+              <th>Ministrante</th>
+              <th>Data</th>
+              <th>Hora</th>
+              <th>Capacidade</th>
+              <th>Vagas Disponíveis</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+        {% for atividade in atividades %}
+            <tr>
+                <td>{{atividade.titulo|upper}}</td>
+                <td>{{atividade.get_tipo_display}}</td>
+                <td>{{atividade.ministrante.nome|upper}}</td>
+                <td>{{atividade.data|date:"d/m/Y"}}</td>
+                <td>{{atividade.hora|date:"H:i"}}</td>
+                <td>{{atividade.capacidade}}</td>
+                <td>{{atividade.get_capacidade_restante}}</td>
+                {% if atividade.tem_vaga %}
+                    <td> <a href="{% url 'appeventos:exibir_form_inscricao' atividade.id%}" class="button is-link">Inscrição</a></td>
+                {% else %}
+                <td> <span class="tag is-danger">Sem Vagas </span></td>
+                {% endif %}
+            </tr>
+        {% endfor %}
+    </tbody>
+    </table>
+    {% endif %}
+    
+    
+</div>
+{% endblock %}
+{% block footer %}
+<p>
+    <strong>TADS-CNAT</strong> Listagem de Atividades
+</p>
+{% endblock %}

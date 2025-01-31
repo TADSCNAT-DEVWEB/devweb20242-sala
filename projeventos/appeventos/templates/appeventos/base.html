@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Sistema de Eventos{% endblock %}</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma/css/bulma.min.css">
+</head>
+<body>
+    <nav class="navbar is-primary">
+        <div class="navbar-brand">
+            <a class="navbar-item" href="{% url 'appeventos:index' %}">Sistema de Eventos</a>
+            <a class="navbar-item" href="{% url 'appeventos:listar_eventos' %}">Eventos</a>
+            <a class="navbar-item" href="#">Ministrantes</a>
+            <a class="navbar-item" href="#">Participantes</a>
+            <a class="navbar-item" href="{% url 'admin:index' %}">Administrador</a>
+        </div>
+    </nav>
+    {% block mensagens %}
+        {% for message in messages %}
+            {% if message.level == DEFAULT_MESSAGE_LEVELS.ERROR %}
+                <div class="notification is-danger">
+                    <button class="delete"></button>
+                    <strong>Erro: </strong> {{message}}
+                </div>
+            {% endif %}
+            {% if message.level == DEFAULT_MESSAGE_LEVELS.SUCCESS %}
+            <div class="notification is-info">
+                <button class="delete"></button>
+                <strong>Sucesso: </strong> {{message}}
+            </div>
+            {% endif %}
+        {% endfor %}
+
+    {% endblock %}
+    <section class="section">
+        <div class="container">
+            {% block conteudo %}{% endblock %}
+        </div>
+    </section>
+    <footer class="footer">
+        <div class="content has-text-centered">
+            {%block footer %}{% endblock %}
+        </div>
+    </footer>
+
+</body>
+</html>
