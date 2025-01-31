@@ -13,6 +13,7 @@
                 <h2 class="subtitle">{{ evento.nome | upper }}</h2>
                 <p>Data: {{ evento.data | date:"d/m/Y" }}</p>
                 <p>Local: {{ evento.local }}</p>
+                <p>Inscritos: {{evento.get_total_inscritos}}</p>
                 <a href="{% url 'appeventos:listar_atividades' evento.id %}" class="button is-link">Detalhes</a>
             </div>
         </div>

@@ -19,7 +19,7 @@ class Evento(models.Model):
         return self.nome
     
     def get_total_inscritos(self):
-        return 0
+        return Evento.objects.filter(id=self.id).aggregate(Count('atividades__participantes'))['atividades__participantes__count']
     
 class Participante(models.Model):
     nome = models.CharField(max_length=150,verbose_name="Nome")
