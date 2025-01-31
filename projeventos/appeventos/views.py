@@ -32,8 +32,8 @@ def exibir_form_inscricao(request,atividade_id):
     context={'atividade':atividade,'participantes':participantes}
     return render(request,template_name='appeventos/atividades/inscricoes.html',context=context)
 def listar_participantes(request,atividade_id):
-    atividade=get_object_or_404(Atividade,atividade_id)
-    criterio=request.GET['criterio']
+    atividade=get_object_or_404(Atividade,pk=atividade_id)
+    criterio=request.GET.get('criterio')
     if criterio==None:
         participantes=atividade.participantes.all()
     else:
