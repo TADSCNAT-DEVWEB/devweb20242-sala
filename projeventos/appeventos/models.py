@@ -1,6 +1,6 @@
 # Create your models here.
 from django.db import models
-from django.db.models import Q
+from django.db.models import Q,Count
 from django.core.exceptions import ValidationError
 
 class Ministrante(models.Model):
@@ -17,6 +17,9 @@ class Evento(models.Model):
     local = models.CharField(max_length=200,verbose_name="Local")
     def __str__(self):
         return self.nome
+    
+    def get_total_inscritos(self):
+        return 0
     
 class Participante(models.Model):
     nome = models.CharField(max_length=150,verbose_name="Nome")

@@ -31,7 +31,19 @@ def exibir_form_inscricao(request,atividade_id):
     participantes=Participante.objects.order_by('nome')
     context={'atividade':atividade,'participantes':participantes}
     return render(request,template_name='appeventos/atividades/inscricoes.html',context=context)
-
+def listar_participantes(request,atividade_id):
+    atividade=get_object_or_404(Atividade,atividade_id)
+    criterio=request.GET['criterio']
+    if criterio==None:
+        participantes=atividade.participantes.all()
+    else:
+        participantes=atividade.participantes.filter(nome__icontains=criterio)
+    context={
+        'atividade_id':atividade.id,
+        'atividade_titulo':atividade.titulo,
+        'participantes':participantes
+    }
+    return render(request,template_name='appeventos/atividades/lista_participantes.html',context=context)
 def listar_atividades(request,evento_id):
     evento=get_object_or_404(Evento,pk=evento_id)
     criterio=request.GET.get('criterio')

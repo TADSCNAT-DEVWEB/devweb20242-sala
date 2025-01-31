@@ -40,7 +40,7 @@
           <tbody>
         {% for atividade in atividades %}
             <tr>
-                <td>{{atividade.titulo|upper}}</td>
+                <td><a href="{% url 'appeventos:listar_participantes' atividade.id%}">{{atividade.titulo|upper}}</a> </td>
                 <td>{{atividade.get_tipo_display}}</td>
                 <td>{{atividade.ministrante.nome|upper}}</td>
                 <td>{{atividade.data|date:"d/m/Y"}}</td>

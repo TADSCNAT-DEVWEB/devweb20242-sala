@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import index,listar_eventos,listar_atividades,exibir_form_inscricao,registrar_inscricao
+from .views import index,listar_eventos,listar_atividades,exibir_form_inscricao,registrar_inscricao,listar_participantes
 app_name='appeventos'
 urlpatterns=[
     path('',index,name='index'),
@@ -7,4 +7,5 @@ urlpatterns=[
     path('eventos/<int:evento_id>/atividades/listar',listar_atividades,name='listar_atividades'),
     path('eventos/atividades/<int:atividade_id>/inscrever',exibir_form_inscricao,name='exibir_form_inscricao'),
     path('eventos/atividades/<int:atividade_id>/registrar',registrar_inscricao,name="registrar_inscricao"),
+    path('eventos/atividades/<int:atividade_id>/participantes',listar_participantes,name='listar_participantes')
 ]
