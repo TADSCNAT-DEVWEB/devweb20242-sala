@@ -38,6 +38,21 @@
             {% block conteudo %}{% endblock %}
         </div>
     </section>
+    {% block pagination %}
+    {% if is_paginated %}
+        <nav class="pagination" role="navigation" aria-label="pagination">
+                {% if page_obj.has_previous %}
+                    <a class="pagination-previous" href="{{ request.path }}?page={{ page_obj.previous_page_number }}">Anterior</a>
+                {% endif %}
+                <ul class="pagination-list">
+                    <li><a class="pagination-link is-current" href="?page={{page_obj.number}}">{{page_obj.number}}</a></li>
+                </ul>
+                {% if page_obj.has_next %}
+                    <a class="pagination-next" href="{{ request.path }}?page={{ page_obj.next_page_number }}">Próximo</a>
+                {% endif %}
+            </nav>
+    {% endif %}
+  {% endblock %}
     <footer class="footer">
         <div class="content has-text-centered">
             {%block footer %}<p>Rodapé</p> {% endblock %}

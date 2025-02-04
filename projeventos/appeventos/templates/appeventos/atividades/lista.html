@@ -10,7 +10,7 @@
     <form method="get" action="{% url 'appeventos:listar_atividades' evento_id %}">
         <div class="field has-addons">
             <div class="control">
-              <input class="input" type="text" name="criterio" placeholder="Buscar pelo título">
+              <input class="input" type="text" name="criterio" value="{% if criterio %} {{criterio}} {% endif %}" placeholder="Buscar pelo título">
             </div>
             <div class="control">
               <button class="button is-info">
@@ -40,7 +40,7 @@
           <tbody>
         {% for atividade in atividades %}
             <tr>
-                <td><a href="{% url 'appeventos:listar_participantes' atividade.id%}">{{atividade.titulo|upper}}</a> </td>
+                <td><a href="{% url 'appeventos:listar_participantes' atividade.id %}">{{atividade.titulo|upper}}</a></td>
                 <td>{{atividade.get_tipo_display}}</td>
                 <td>{{atividade.ministrante.nome|upper}}</td>
                 <td>{{atividade.data|date:"d/m/Y"}}</td>
