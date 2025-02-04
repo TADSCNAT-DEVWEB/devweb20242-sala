@@ -10,7 +10,7 @@
     <form method="get" action="{% url 'appeventos:listar_participantes' atividade_id %}">
         <div class="field has-addons">
             <div class="control">
-              <input class="input" type="text" name="criterio" placeholder="Buscar por nome">
+              <input class="input" type="text" name="criterio" value="{% if criterio %}{{criterio}}{% endif %}" placeholder="Buscar por nome">
             </div>
             <div class="control">
               <button class="button is-info">
@@ -20,20 +20,36 @@
           </div>
     </form>
 <p></p>
+    <form action="{% url 'appeventos:registrar_presenca' atividade_id%}" method="post">
+        {% csrf_token %}
+        <input type="hidden" name="criterio" value="{% if criterio %}{{criterio}}{% endif %}">
     <table class="table is-bordered is-striped is-hoverable is-narrow">
         <thead>
             <tr>
               <th>Nome</th>
+              <th>Está Presente?</th>
             </tr>
           </thead>
           <tbody>
-        {% for participante in participantes %}
+        {% for inscricao in inscricoes%}
             <tr>
-                <td>{{participante.nome}}</td>
+                <td>{{inscricao.participante.nome}}</td>
+                <td>
+                    <input type="hidden" name="inscricoes_ids" value="{{inscricao.id}}">
+                    <label class="checkbox">
+                        <input type="checkbox" name="inscricao_{{inscricao.id}}" {% if inscricao.presenca %} checked {% endif %} />
+                        Presente
+                      </label>
+                </td>
             </tr>
         {% endfor %}
     </tbody>
     </table>
+    <div class="control">
+        <button class="button is-info">
+          Salvar
+        </button>
+    </form>
 
     
     
