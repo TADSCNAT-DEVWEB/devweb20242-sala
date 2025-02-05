@@ -1,0 +1,53 @@
+{% extends "appeventos/base.html" %}
+
+{% block title %}Sistema de Eventos - Ministrantes{% endblock %}
+
+{% block conteudo %}
+<div class="content">
+    
+    <h1>Listagem de Ministrantes</h1>
+    
+    <form method="get" action="{% url 'appeventos:listar_ministrantes'%}">
+        <div class="field has-addons">
+            <div class="control">
+              <input class="input" type="text" name="criterio" value="{{request.GET.criterio}}" placeholder="Buscar pelo nome">
+            </div>
+            <div class="control">
+              <button class="button is-info">
+                Buscar
+              </button>
+            </div>
+          </div>
+    </form>
+<p></p>
+    
+    <table class="table is-bordered is-striped is-hoverable is-narrow">
+        <thead>
+            <tr>
+              <th>Nome</th>
+              <th>Data de Nascimento</th>
+              <th>Link do Currículo</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+        {% for ministrante in ministrantes %}
+            <tr>
+                <td>{{ministrante.nome|upper}}</td>
+                <td>{{ministrante.data_nascimento|date:"d/m/Y"}}</td>
+                <td><a href="{{ministrante.link_curriculo}}">Link do Currículo</a></td>
+                <td> <a href="{% url 'appeventos:editar_ministrante' ministrante.id %}" class="button is-link">Editar</a>
+                    <a href="{% url 'appeventos:excluir_ministrante' ministrante.id %}" class="button is-danger">Excluir</a>
+                </td>
+            </tr>
+        {% endfor %}
+    </tbody>
+    </table>
+    <a class="button is-primary mb-4" href="{% url 'appeventos:cadastrar_ministrante' %}">Adicionar Ministrante</a>
+</div>
+{% endblock %}
+{% block footer %}
+<p>
+    <strong>TADS-CNAT</strong> Listagem de Ministrantes
+</p>
+{% endblock %}
