@@ -1,10 +1,11 @@
 from django.shortcuts import render,get_object_or_404,redirect
 from django.contrib import messages
 from django.views import View
+from django.urls import reverse_lazy
 from django.core.exceptions import ValidationError
-from django.views.generic import ListView
+from django.views.generic import ListView,DeleteView
 
-from appeventos.models import Atividade,Evento,Inscricao,Participante
+from appeventos.models import Atividade,Evento,Inscricao,Participante,Ministrante
 
 class EventoView(ListView):
     model=Evento
@@ -72,5 +73,59 @@ class InscricaoView(View):
             inscricao.save()
             return redirect("appeventos:listar_atividades",evento_id=atividade.evento.id)
         except ValidationError as error:
-            messages.error(request,message=str(error))
+            messages.error(request,message=error.message)
             return redirect('appeventos:exibir_form_inscricao',atividade_id=atividade.id)
+
+class MinistranteListView(ListView):
+    model=Ministrante
+    context_object_name="ministrantes"
+    template_name="appeventos/ministrantes/lista.html"
+    paginate_by=3
+
+    def get_queryset(self):
+        queryset=Ministrante.objects.order_by("nome")
+        criterio=self.request.GET.get("criterio")
+        if criterio:
+            queryset=queryset.filter(nome__icontains=criterio).order_by("nome")
+        return queryset
+
+class MinistranteCreateUpdateView(View):
+    template_name="appeventos/ministrantes/form.html"
+    def get(self,request,*args,**kwargs):
+        ministrante_id=kwargs.get("ministrante_id")
+        if ministrante_id:
+            ministrante=get_object_or_404(Ministrante,pk=ministrante_id)
+        else:
+            ministrante=None
+        context={"ministrante":ministrante}
+        return render(request=request,template_name=self.template_name,context=context)
+    
+    def post(self,request,*args,**kwargs):
+        ministrante_id=kwargs.get("ministrante_id")
+        nome=request.POST.get('nome')
+        data_nascimento=request.POST.get('data_nascimento')
+        link_curriculo=request.POST.get('link_curriculo')
+        if ministrante_id:
+            ministrante=get_object_or_404(Ministrante,pk=ministrante_id)
+            ministrante.nome=nome
+            ministrante.data_nascimento=data_nascimento
+            ministrante.link_curriculo=link_curriculo
+        else:
+            ministrante=Ministrante(nome=nome,data_nascimento=data_nascimento,link_curriculo=link_curriculo)
+        try:
+            ministrante.full_clean()
+            ministrante.save()
+            messages.success(request=request,message=f"Ministrante {ministrante.nome} Salvo com Sucesso")
+            return redirect("appeventos:listar_ministrantes")
+        except ValidationError as error:
+            for atributo, error_list in error.message_dict.items():
+                for error in error_list:
+                    messages.error(request=request,message=f"{error}")
+            context={'ministrante':ministrante}
+            return render(request=request,template_name=self.template_name,context=context)
+
+class MinistranteDeleteView(DeleteView):
+    model=Ministrante
+    template_name="appeventos/ministrantes/excluir.html"
+    #https://docs.djangoproject.com/en/5.1/ref/urlresolvers/#reverse-lazy
+    success_url=reverse_lazy("appeventos:listar_ministrantes")

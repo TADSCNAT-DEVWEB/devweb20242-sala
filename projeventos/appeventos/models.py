@@ -1,6 +1,8 @@
 # Create your models here.
 from django.db import models
 from django.db.models import Q,Count
+from django.utils import timezone
+from django.core.validators import URLValidator
 from django.core.exceptions import ValidationError
 
 class Ministrante(models.Model):
@@ -10,6 +12,22 @@ class Ministrante(models.Model):
 
     def __str__(self):
         return self.nome
+    def clean(self):
+        erros={}
+        if len(self.nome.strip())<5:
+            erros["nome"]="Nome não pode ter menos do que 5 caracteres"
+        if self.data_nascimento > timezone.now().date():
+            erros["data_nascimento"]="Data de Nascimento não pode ser no futuro"
+        
+        url_validator=URLValidator()
+
+        try:
+            url_validator(self.link_curriculo)
+        except ValidationError:
+            erros["link_curriculo"]="O Link do currículo precisa ser uma URL"
+
+        if erros:
+            raise ValidationError(erros)
 
 class Evento(models.Model):
     nome = models.CharField(max_length=155,verbose_name="Nome")
