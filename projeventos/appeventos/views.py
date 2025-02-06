@@ -82,7 +82,7 @@ class MinistranteListView(ListView):
     template_name="appeventos/ministrantes/lista.html"
     paginate_by=3
 
-    def get_queryset(self):
+    def get_queryset(self): #Sobrescreve o méotdo get_queryset para lidar com a busca de ministrantes
         queryset=Ministrante.objects.order_by("nome")
         criterio=self.request.GET.get("criterio")
         if criterio:
@@ -113,12 +113,12 @@ class MinistranteCreateUpdateView(View):
         else:
             ministrante=Ministrante(nome=nome,data_nascimento=data_nascimento,link_curriculo=link_curriculo)
         try:
-            ministrante.full_clean()
+            ministrante.full_clean() #Método full_clean realiza todos as validações possíveis no modelo = https://docs.djangoproject.com/en/5.1/ref/models/instances/#validating-objects
             ministrante.save()
             messages.success(request=request,message=f"Ministrante {ministrante.nome} Salvo com Sucesso")
             return redirect("appeventos:listar_ministrantes")
         except ValidationError as error:
-            for atributo, error_list in error.message_dict.items():
+            for atributo, error_list in error.message_dict.items(): # Nesse formato, adicionamos os erros ao messages para que sejam exibidos na tela.
                 for error in error_list:
                     messages.error(request=request,message=f"{error}")
             context={'ministrante':ministrante}
@@ -129,3 +129,4 @@ class MinistranteDeleteView(DeleteView):
     template_name="appeventos/ministrantes/excluir.html"
     #https://docs.djangoproject.com/en/5.1/ref/urlresolvers/#reverse-lazy
     success_url=reverse_lazy("appeventos:listar_ministrantes")
+

@@ -5,6 +5,9 @@ from django.utils import timezone
 from django.core.validators import URLValidator
 from django.core.exceptions import ValidationError
 
+
+
+
 class Ministrante(models.Model):
     nome = models.CharField(max_length=150,verbose_name="Nome")
     data_nascimento = models.DateField(verbose_name="Data de Nascimento")
@@ -12,10 +15,16 @@ class Ministrante(models.Model):
 
     def __str__(self):
         return self.nome
+    """
+        Como estratégia de gerenciamento de erros, criamos um dicionário para reter as mensagens de erro por campo,
+        de forma que o usuário receba as informações da forma correta e de uma única vez.
+    """
     def clean(self):
-        erros={}
+        erros={} #Erros são gerados de uma única vez e gerada uma única vez.
+
         if len(self.nome.strip())<5:
             erros["nome"]="Nome não pode ter menos do que 5 caracteres"
+        
         if self.data_nascimento > timezone.now().date():
             erros["data_nascimento"]="Data de Nascimento não pode ser no futuro"
         
@@ -26,7 +35,7 @@ class Ministrante(models.Model):
         except ValidationError:
             erros["link_curriculo"]="O Link do currículo precisa ser uma URL"
 
-        if erros:
+        if erros: #Gerado a exeção que inclui todos os erros
             raise ValidationError(erros)
 
 class Evento(models.Model):
@@ -110,7 +119,7 @@ class Avaliacao(models.Model):
     def __str__(self):
         return f'{self.inscricao}'
     
-    def save(self, *args, **kwargs):
+    def save(self, *args, **kwargs): #nessa validação é feia apenas durante o save
         if not self.inscricao.presenca:
             raise ValidationError("Não é possível realizar avaliação para participante ausente")
         return super().save(*args, **kwargs)
