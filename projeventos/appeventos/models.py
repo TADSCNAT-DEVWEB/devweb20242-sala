@@ -5,9 +5,6 @@ from django.utils import timezone
 from django.core.validators import URLValidator
 from django.core.exceptions import ValidationError
 
-
-
-
 class Ministrante(models.Model):
     nome = models.CharField(max_length=150,verbose_name="Nome")
     data_nascimento = models.DateField(verbose_name="Data de Nascimento")
@@ -24,6 +21,7 @@ class Ministrante(models.Model):
 
         if len(self.nome.strip())<5:
             erros["nome"]="Nome não pode ter menos do que 5 caracteres"
+            #raise ValidationError("Nome não pode ter menos do que 5 caracteres")
         
         if self.data_nascimento > timezone.now().date():
             erros["data_nascimento"]="Data de Nascimento não pode ser no futuro"

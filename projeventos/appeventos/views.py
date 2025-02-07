@@ -89,6 +89,7 @@ class MinistranteListView(ListView):
             queryset=queryset.filter(nome__icontains=criterio).order_by("nome")
         return queryset
 
+
 class MinistranteCreateUpdateView(View):
     template_name="appeventos/ministrantes/form.html"
     def get(self,request,*args,**kwargs):
