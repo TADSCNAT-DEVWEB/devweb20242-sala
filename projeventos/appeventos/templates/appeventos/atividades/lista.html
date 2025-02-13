@@ -20,7 +20,6 @@
           </div>
     </form>
 <p></p>
-    {% if not messages %}
     
     
     
@@ -35,29 +34,41 @@
               <th>Capacidade</th>
               <th>Vagas Disponíveis</th>
               <th></th>
+              <th></th>
             </tr>
           </thead>
           <tbody>
-        {% for atividade in atividades %}
+        {% for atividade in page_obj %}
             <tr>
-                <td><a href="{% url 'appeventos:listar_participantes' atividade.id %}">{{atividade.titulo|upper}}</a></td>
+                {% if user.is_authenticated and user.is_superuser %}
+                  <td><a href="{% url 'appeventos:listar_participantes' atividade.id %}">{{atividade.titulo|upper}}</a></td>
+                {% else %}
+                  <td>{{atividade.titulo|upper}}</td>
+                {% endif %}
                 <td>{{atividade.get_tipo_display}}</td>
                 <td>{{atividade.ministrante.nome|upper}}</td>
                 <td>{{atividade.data|date:"d/m/Y"}}</td>
                 <td>{{atividade.hora|date:"H:i"}}</td>
                 <td>{{atividade.capacidade}}</td>
                 <td>{{atividade.get_capacidade_restante}}</td>
-                {% if atividade.tem_vaga %}
+                {% if atividade.tem_vaga and user.participante %}
                     <td> <a href="{% url 'appeventos:exibir_form_inscricao' atividade.id%}" class="button is-link">Inscrição</a></td>
                 {% else %}
-                <td> <span class="tag is-danger">Sem Vagas </span></td>
+                    {% if user.participante %}
+                      <td> <span class="tag is-danger">Sem Vagas</span></td>
+                    {% else %}
+                      <td>-</td>
+                    {% endif %}
                 {% endif %}
+                {% if user.participante %}
+                <td> <a href="{% url 'appeventos:avaliar_atividade' atividade.id%}" class="button is-primary">Avaliar</span></td>
+              {% else %}
+                <td>-</td>
+              {% endif %}
             </tr>
         {% endfor %}
     </tbody>
     </table>
-    {% endif %}
-    
     
 </div>
 {% endblock %}

@@ -1,0 +1,27 @@
+{% extends 'appeventos/base.html' %}
+{% block title %}Sistema de Gerenciamento de Eventos - Login{% endblock %}
+{% block conteudo %}
+  <div class="column is-4 is-offset-4">
+    <h1 class="title has-text-centered">Login</h1>
+    <form method="post">
+      {% csrf_token %}
+      <div class="field">
+        <label class="label" for="id_username">Usuário</label>
+        <div class="control">
+          <input class="input" type="text" name="username" id="id_username" required>
+        </div>
+      </div>
+      <div class="field">
+        <label class="label" for="id_password">Senha</label>
+        <div class="control">
+          <input class="input" type="password" name="password" id="id_password" required>
+        </div>
+      </div>
+      <div class="field">
+        <div class="control">
+          <button class="button is-primary is-fullwidth" type="submit">Entrar</button>
+        </div>
+      </div>
+    </form>
+  </div>
+{% endblock %}

@@ -1,0 +1,67 @@
+{% extends "appeventos/base.html" %}
+
+{% block title %}Sistema de Eventos - Participantes{% endblock %}
+
+{% block conteudo %}
+<div class="content">
+    <h1>Faça seu cadastrro</h1>
+      <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+          <div class="field">
+            <label class="label" for="nome">Nome</label>
+            <div class="control">
+              <input class="input" type="text" id="nome" name="nome" placeholder="Nome" value="{{ participante.nome|default:'' }}" required>
+            </div>
+          </div>
+          
+          <div class="field">
+            <label class="label" for="login">Login</label>
+            <div class="control">
+              <input class="input" type="text" id="login" name="login" placeholder="Login" value="{{ participante.user.username|default:'' }}" required>
+            </div>
+          </div>
+
+          <div class="field">
+            <label class="label" for="senha">Senha</label>
+            <div class="control">
+              <input class="input" type="password" id="senha" name="senha" placeholder="Senha" required>
+            </div>
+          </div>
+
+          <div class="field">
+            <label class="label" for="email">E-mail</label>
+            <div class="control">
+              <input class="input" type="email" id="email" name="email" placeholder="E-mail" required>
+            </div>
+          </div>
+
+          <div class="field">
+            <label class="label" for="telefone">Telefone</label>
+            <div class="control">
+              <input class="input" type="telefone" id="telefone" name="telefone" placeholder="Telefone" required>
+            </div>
+          </div>
+          <div class="field">
+            <label class="label">Foto (PNG ou JPG)</label>
+            <div class="control">
+              <input class="input" type="file" name="foto" accept=".png, .jpg, .jpeg">
+            </div>
+          </div
+          <div class="field is-grouped">
+            <div class="control">
+              <button class="button is-link" type="submit">Cadastrar</button>
+            </div>
+            <div class="control">
+              <a class="button is-text" href="{% url 'appeventos:index' %}">Cancelar</a>
+            </div>
+          </div>
+      </form>
+    
+    
+</div>
+{% endblock %}
+{% block footer %}
+<p>
+    <strong>TADS-CNAT</strong> Faça seu cadastro e acesse o Site!
+</p>
+{% endblock %}

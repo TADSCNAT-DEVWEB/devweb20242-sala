@@ -5,16 +5,48 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}Sistema de Eventos{% endblock %}</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma/css/bulma.min.css">
+    {%load static%}
 </head>
 <body>
     <nav class="navbar is-primary">
-        <div class="navbar-brand">
+        <div class="navbar-start">
             <a class="navbar-item" href="{% url 'appeventos:index' %}">Sistema de Eventos</a>
             <a class="navbar-item" href="{% url 'appeventos:listar_eventos' %}">Eventos</a>
-            <a class="navbar-item" href="{% url 'appeventos:listar_ministrantes' %}">Ministrantes</a>
-            <a class="navbar-item" href="#">Participantes</a>
+            {% if user.is_superuser %}
+                <a class="navbar-item" href="{% url 'appeventos:listar_ministrantes' %}">Ministrantes</a>
+            {%endif%}
             <a class="navbar-item" href="{% url 'admin:index' %}">Administrador</a>
         </div>
+        <div class="navbar-end">
+            {% if user.is_authenticated %}
+            <div class="navbar-item">
+                <!-- Exibe a foto do usuário se disponível. Substitua "user.profile.image.url" pela sua lógica. -->
+                <figure class="image is-32x32">
+                  <img class="is-rounded" src="{% if user.is_superuser %} {% static 'appeventos/img/default-user.jpg' %} {% else %} {{ user.participante.foto.url }} {% endif %}" alt="Foto do usuário">
+                </figure>
+                <span>{% if user.is_superuser %} {{user.username}} {% else %} {{ user.participante.nome}} {% endif %}</span>
+              </div>
+              <div class="navbar-item">
+                <div class="buttons">
+                  <a class="button is-light" href="{% url 'appeventos:logout' %}">
+                    Logout
+                  </a>
+                </div>
+              </div>
+            {%else%}
+            <div class="navbar-item">
+                <div class="buttons">
+                  <a class="button is-primary" href="{% url 'appeventos:registrar_participante'%}">
+                    <strong>Registre-se</strong>
+                  </a>
+                  <a class="button is-light" href="{% url 'appeventos:login'%}">
+                    Login
+                  </a>
+                </div>
+              </div>
+            </div>
+            {%endif%}
+            
     </nav>
     {% block mensagens %}
         {% for message in messages %}
@@ -53,11 +85,16 @@
             </nav>
     {% endif %}
   {% endblock %}
+
     <footer class="footer">
         <div class="content has-text-centered">
-            {%block footer %}<p>Rodapé</p> {% endblock %}
+            {%block footer %}{% endblock %}
         </div>
     </footer>
+
+     
+    </body>
+    </html>
 
 </body>
 </html>

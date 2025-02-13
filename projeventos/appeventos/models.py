@@ -2,6 +2,7 @@
 from django.db import models
 from django.db.models import Q,Count
 from django.utils import timezone
+from django.contrib.auth.models import User
 from django.core.validators import URLValidator
 from django.core.exceptions import ValidationError
 
@@ -49,7 +50,8 @@ class Evento(models.Model):
 class Participante(models.Model):
     nome = models.CharField(max_length=150,verbose_name="Nome")
     telefone =  models.CharField(max_length=20,verbose_name="Telefone")
-    email = models.EmailField(max_length=100,verbose_name="Email")
+    user=models.OneToOneField(User,on_delete=models.CASCADE,blank=True,null=True,related_name='participante')
+    foto=models.ImageField(upload_to='participantes/',blank=True,null=True,verbose_name="Foto")
 
     def __str__(self):
         return self.nome
@@ -117,9 +119,12 @@ class Avaliacao(models.Model):
     def __str__(self):
         return f'{self.inscricao}'
     
-    def save(self, *args, **kwargs): #nessa validação é feia apenas durante o save
+    def save(self, *args, **kwargs):
         if not self.inscricao.presenca:
             raise ValidationError("Não é possível realizar avaliação para participante ausente")
+        if self._state.adding:
+            if Avaliacao.objects.filter(inscricao=self.inscricao).exists():
+                raise ValidationError("Avaliação já registrada")
         return super().save(*args, **kwargs)
     class Meta:
         verbose_name_plural="Avaliações"

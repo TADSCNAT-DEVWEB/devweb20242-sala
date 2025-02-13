@@ -5,27 +5,15 @@
 {% block conteudo %}
 <div class="content">
     
-    <h1>Inscrição para a atividade {{atividade.titulo}}</h1>
+    <h1>Deseja confirmar a Inscrição para a atividade {{atividade.titulo}}</h1>
       <form action="{% url 'appeventos:registrar_inscricao' atividade.id %}" method="post">
         {% csrf_token %}
-        <div class="field">
-            <label class="label">Participante</label>
-            <div class="control">
-              <div class="select">
-                <select name="participante">
-                  {% for participante in participantes %}
-                    <option value="{{participante.id}}">{{participante.nome}}</option>
-                  {% endfor %}
-                </select>
-            </div>
-            </div>
-        </div>
         <div class="field is-grouped">
             <div class="control">
               <button class="button is-link">Salvar</button>
             </div>
             <div class="control">
-              <a class="button is-text" href="{% url 'appeventos:listar_atividades' atividade.evento.id %}">Cancelar</a>
+              <a class="button is-text" href="{% url 'appeventos:index' %}">Cancelar</a>
             </div>
           </div>
       </form>
