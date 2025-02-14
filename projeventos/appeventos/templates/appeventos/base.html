@@ -5,9 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}Sistema de Eventos{% endblock %}</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma/css/bulma.min.css">
-    {%load static%}
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'appeventos/css/darkmode.css' %}">
 </head>
-<body>
+<body class="{% if request.session.dark_mode %}dark-mode{% endif %}">
     <nav class="navbar is-primary">
         <div class="navbar-start">
             <a class="navbar-item" href="{% url 'appeventos:index' %}">Sistema de Eventos</a>
@@ -18,9 +19,11 @@
             <a class="navbar-item" href="{% url 'admin:index' %}">Administrador</a>
         </div>
         <div class="navbar-end">
+            <div class="navbar-item">
+                <button id="dark-mode-toggle" class="button is-light">{% if request.session.dark_mode %}Modo Claro{% else %}Modo Escuro{% endif %}</button>
+            </div>
             {% if user.is_authenticated %}
             <div class="navbar-item">
-                <!-- Exibe a foto do usuário se disponível. Substitua "user.profile.image.url" pela sua lógica. -->
                 <figure class="image is-32x32">
                   <img class="is-rounded" src="{% if user.is_superuser %} {% static 'appeventos/img/default-user.jpg' %} {% else %} {{ user.participante.foto.url }} {% endif %}" alt="Foto do usuário">
                 </figure>
@@ -92,7 +95,27 @@
         </div>
     </footer>
 
-     
+        ...
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const toggleButton = document.getElementById('dark-mode-toggle');
+            const body = document.body;
+    
+            toggleButton.addEventListener('click', () => {
+                fetch("{% url 'appeventos:darkmode' %}")
+                .then(response => response.json())
+                .then(data => {
+                    if (data.dark_mode) {
+                        body.classList.add('dark-mode');
+                        toggleButton.textContent = 'Modo Claro';
+                    } else {
+                        body.classList.remove('dark-mode');
+                        toggleButton.textContent = 'Modo Escuro';
+                    }
+                });
+            });
+        });
+    </script>
     </body>
     </html>
 

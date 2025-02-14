@@ -1,0 +1,20 @@
+
+.dark-mode {
+    background-color: #121212;
+    color: #ffffff;
+}
+.dark-mode .navbar {
+    background-color: #1f1f1f;
+}
+.dark-mode .navbar-item,
+.dark-mode .button {
+    color: #ffffff;
+}
+.dark-mode .notification.is-danger {
+    background-color: #ff3860;
+    color: #ffffff;
+}
+.dark-mode .notification.is-info {
+    background-color: #209cee;
+    color: #ffffff;
+}

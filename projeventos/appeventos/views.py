@@ -8,11 +8,12 @@ from django.urls import reverse_lazy
 from django.core.exceptions import ValidationError,ObjectDoesNotExist
 from django.views.generic import ListView,DeleteView
 from django.core.paginator import Paginator
-import os
+from django.http import JsonResponse
 from django.contrib.auth.decorators import user_passes_test
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.utils.decorators import method_decorator
 from appeventos.models import Atividade,Evento,Inscricao,Participante,Ministrante,Avaliacao
+import os
 
 def eh_participante(user):
     return hasattr(user,'participante')
@@ -252,3 +253,11 @@ class AvalicaoCreateView(LoginRequiredMixin,View):
         except ValidationError as error:
             messages.error(request,message=error.message)
             return redirect('appeventos:listar_atividades',evento_id=atividade.evento.id)
+
+class ToggleDarkModeView(View):
+    def get(self, request, *args, **kwargs):
+        if request.session.get('dark_mode', False):
+            request.session['dark_mode'] = False
+        else:
+            request.session['dark_mode'] = True
+        return JsonResponse({'dark_mode': request.session['dark_mode']})
