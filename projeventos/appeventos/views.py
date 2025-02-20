@@ -13,6 +13,7 @@ from django.contrib.auth.decorators import user_passes_test
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.utils.decorators import method_decorator
 from appeventos.models import Atividade,Evento,Inscricao,Participante,Ministrante,Avaliacao
+from appeventos.forms import ContatoForm
 import os
 
 def eh_participante(user):
@@ -261,3 +262,22 @@ class ToggleDarkModeView(View):
         else:
             request.session['dark_mode'] = True
         return JsonResponse({'dark_mode': request.session['dark_mode']})
+
+
+
+class FormContatoView(View):
+    template_name='appeventos/contato/form.html'
+    form_class=ContatoForm
+
+    def get(self,request,*args,**kwargs):
+        form=self.form_class()
+        return render(request,self.template_name,{'form':form})
+    def post(self,request,):
+        form=self.form_class(request.POST)
+        if form.is_valid():
+           assunto=form.cleaned_data['assunto']
+           mensagem=form.cleaned_data['mensagem']
+           remetente=form.cleaned_data['remetente']
+           context={'assunto':assunto,'mensagem':mensagem,'remetente':remetente}
+           return render(request,template_name='appeventos/contato/sucesso.html',context=context)
+        return render(request,template_name=self.template_name,context={'form':form}) 

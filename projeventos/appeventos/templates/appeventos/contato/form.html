@@ -1,0 +1,16 @@
+{% extends 'appeventos/base.html' %}
+{% block title %}Sistema de Gerenciamento de Eventos - Mensagem{% endblock %}
+{% block conteudo %}
+  <div class="column is-4 is-offset-4">
+    <h1 class="title has-text-centered">Contato</h1>
+    <form method="post">
+      {% csrf_token %}
+      {{form.as_p}}
+      <div class="field">
+        <div class="control">
+          <button class="button is-primary is-fullwidth" type="submit">Enviar</button>
+        </div>
+      </div>
+    </form>
+  </div>
+{% endblock %}

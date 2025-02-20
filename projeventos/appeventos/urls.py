@@ -1,6 +1,6 @@
 from django.urls import path
 #from .views import index,listar_eventos,listar_atividades,exibir_form_inscricao,registrar_inscricao,listar_participantes
-from .views import EventoView,AtividadeView,AtividadeParticipanteView,InscricaoView,MinistranteListView,MinistranteCreateUpdateView,MinistranteDeleteView,ParticipanteCreateView,EventosLoginView,EventosLogoutView,AvalicaoCreateView,ToggleDarkModeView
+from .views import EventoView,AtividadeView,AtividadeParticipanteView,InscricaoView,MinistranteListView,MinistranteCreateUpdateView,MinistranteDeleteView,ParticipanteCreateView,EventosLoginView,EventosLogoutView,AvalicaoCreateView,ToggleDarkModeView,FormContatoView
 from django.views.generic import TemplateView
 app_name='appeventos'
 #urlpatterns=[
@@ -27,6 +27,7 @@ urlpatterns=[
     path('ministrante/<int:pk>/excluir',MinistranteDeleteView.as_view(),name='excluir_ministrante'),
     path('participantes/registrar',ParticipanteCreateView.as_view(),name='registrar_participante'),
     path('darkmode/',ToggleDarkModeView.as_view(),name='darkmode'),
+    path('contato/',FormContatoView.as_view(),name='contato'),
     path('login/',EventosLoginView.as_view(),name='login'),
     path('logout/',EventosLogoutView.as_view(),name='logout'),
     ]
