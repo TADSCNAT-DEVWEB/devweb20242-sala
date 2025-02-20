@@ -5,6 +5,7 @@ from django.utils import timezone
 from django.contrib.auth.models import User
 from django.core.validators import URLValidator
 from django.core.exceptions import ValidationError
+from datetime import timedelta
 
 class Ministrante(models.Model):
     nome = models.CharField(max_length=150,verbose_name="Nome")
@@ -24,9 +25,16 @@ class Ministrante(models.Model):
             erros["nome"]="Nome não pode ter menos do que 5 caracteres"
             #raise ValidationError("Nome não pode ter menos do que 5 caracteres")
         
-        if self.data_nascimento > timezone.now().date():
-            erros["data_nascimento"]="Data de Nascimento não pode ser no futuro"
-        
+        if self.data_nascimento != None:
+            if self.data_nascimento > timezone.now().date():
+                erros["data_nascimento"]="Data de Nascimento não pode ser no futuro"
+            dataref=timedelta(days=18*365.25)
+            print(dataref)
+            data_limite = timezone.now().date() - dataref
+            print(data_limite)
+            if self.data_nascimento > data_limite:
+                erros['data_nascimento'] = "O ministrante deve ter, no mínimo, 18 anos de idade."
+
         url_validator=URLValidator()
 
         try:

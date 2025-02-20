@@ -1,6 +1,6 @@
 from django.urls import path
 #from .views import index,listar_eventos,listar_atividades,exibir_form_inscricao,registrar_inscricao,listar_participantes
-from .views import EventoView,AtividadeView,AtividadeParticipanteView,InscricaoView,MinistranteListView,MinistranteCreateUpdateView,MinistranteDeleteView,ParticipanteCreateView,EventosLoginView,EventosLogoutView,AvalicaoCreateView,ToggleDarkModeView,FormContatoView
+from .views import EventoView,AtividadeView,AtividadeParticipanteView,InscricaoView,MinistranteListView,MinistranteCreateUpdateView,MinistranteDeleteView,ParticipanteCreateView,EventosLoginView,EventosLogoutView,AvalicaoCreateView,ToggleDarkModeView,FormContatoView,MinistranteFormCreateUpdateView
 from django.views.generic import TemplateView
 app_name='appeventos'
 #urlpatterns=[
@@ -22,8 +22,10 @@ urlpatterns=[
     path('eventos/atividades/<int:atividade_id>/registrar_presenca',AtividadeParticipanteView.as_view(),name='registrar_presenca'),
     path('eventos/atividades/<int:atividade_id>/avaliar',AvalicaoCreateView.as_view(),name='avaliar_atividade'),
     path('ministrantes',MinistranteListView.as_view(),name='listar_ministrantes'),
-    path('ministrantes/cadastrar',MinistranteCreateUpdateView.as_view(),name='cadastrar_ministrante'),
-    path('ministrante/<int:ministrante_id>/editar',MinistranteCreateUpdateView.as_view(),name='editar_ministrante'),
+    #path('ministrantes/cadastrar',MinistranteCreateUpdateView.as_view(),name='cadastrar_ministrante'),
+    #path('ministrante/<int:ministrante_id>/editar',MinistranteCreateUpdateView.as_view(),name='editar_ministrante'),
+    path('ministrantes/cadastrar',MinistranteFormCreateUpdateView.as_view(),name='cadastrar_ministrante'),
+    path('ministrante/<int:ministrante_id>/editar',MinistranteFormCreateUpdateView.as_view(),name='editar_ministrante'),
     path('ministrante/<int:pk>/excluir',MinistranteDeleteView.as_view(),name='excluir_ministrante'),
     path('participantes/registrar',ParticipanteCreateView.as_view(),name='registrar_participante'),
     path('darkmode/',ToggleDarkModeView.as_view(),name='darkmode'),

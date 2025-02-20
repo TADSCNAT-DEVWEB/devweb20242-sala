@@ -1,0 +1,27 @@
+{% extends 'appeventos/base.html' %}
+{% block title %}Sistema de Gerenciamento de Eventos - Contato{% endblock %}
+{% block conteudo %}
+<div class="card">
+    <div class="card-content">
+      <p class="title">
+        {{assunto}}
+      </p>
+      <p class="subtitle">Sistema de Eventos</p>
+    </div>
+    <div class="card-content">
+        <div class="content">
+          {{mensagem}}
+        </div>
+      </div>
+    <footer class="card-footer">
+      <p class="card-footer-item">
+        <span>
+          Remetente
+          <a href="mailto:{{remetente}}"
+            >{{remetente}}</a
+          >
+        </span>
+      </p>
+    </footer>
+  </div>
+{% endblock %}

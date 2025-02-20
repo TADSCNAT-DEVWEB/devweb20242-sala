@@ -13,7 +13,7 @@ from django.contrib.auth.decorators import user_passes_test
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.utils.decorators import method_decorator
 from appeventos.models import Atividade,Evento,Inscricao,Participante,Ministrante,Avaliacao
-from appeventos.forms import ContatoForm
+from appeventos.forms import ContatoForm,MinistranteForm
 import os
 
 def eh_participante(user):
@@ -266,7 +266,7 @@ class ToggleDarkModeView(View):
 
 
 class FormContatoView(View):
-    template_name='appeventos/contato/form.html'
+    template_name='appeventos/contato/form-bulma.html'
     form_class=ContatoForm
 
     def get(self,request,*args,**kwargs):
@@ -281,3 +281,34 @@ class FormContatoView(View):
            context={'assunto':assunto,'mensagem':mensagem,'remetente':remetente}
            return render(request,template_name='appeventos/contato/sucesso.html',context=context)
         return render(request,template_name=self.template_name,context={'form':form}) 
+
+@method_decorator(user_passes_test(eh_administrador),name='dispatch')
+class MinistranteFormCreateUpdateView(View,LoginRequiredMixin):
+    template_name="appeventos/ministrantes/form_new.html"
+    def get(self,request,*args,**kwargs):
+        ministrante_id=kwargs.get("ministrante_id")
+        if ministrante_id:
+            ministrante=get_object_or_404(Ministrante,pk=ministrante_id)
+            form=MinistranteForm(instance=ministrante)
+        else:
+            form=MinistranteForm()
+        context={'form':form}
+        return render(request=request,template_name=self.template_name,context=context)
+    
+    def post(self,request,*args,**kwargs):
+        ministrante_id=kwargs.get("ministrante_id")
+        if ministrante_id:
+           ministrante=get_object_or_404(Ministrante,pk=ministrante_id)
+           form=MinistranteForm(request.POST,instance=ministrante)
+        else:
+            form=MinistranteForm(request.POST)
+        if form.is_valid():
+            form.save()
+            messages.success(request=request,message=f"Ministrante {form.cleaned_data['nome']} Salvo com Sucesso")
+            return redirect("appeventos:listar_ministrantes")
+        else:
+            for atributo, error_list in form.errors.items():
+                for error in error_list:
+                    messages.error(request=request,message=f"{error}")
+            context={'form':form}
+            return render(request=request,template_name=self.template_name,context=context)
